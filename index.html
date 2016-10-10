@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Tasty Westfield</title>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+		<link rel="icon" href="./favicon.ico">
+		<link rel="stylesheet" type="text/css" href="./css/main.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<div class="TitleBar">
+			<span class="MenuButton"><i id="MenuIcon" class="material-icons">menu</i></span>
+			<span>Tasty Town - Westfield</span>
+		</div>
+		<div>
+			<nav id="Nav">
+				Filter Places: <input id="FilterText" data-bind="textInput: query, valueUpdate:['afterkeydown','propertychange','input']" /><button id="ClearFilterTextBtn" type="button">Clear</button>
+				<br>
+					<ul class ="MenuLinks" data-bind="foreach: filteredLocations">
+						<li>
+						<a href="#" data-bind="text: name, click:	function(data) {$parent.setSelectedPlace(data)}"></a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+		<div class="Container">
+			<div id="MapContainer">
+			</div>
+		</div>
+		<script src="./js/lib/jquery-3.1.0.min.js"></script>
+		<script src="./js/lib/knockout-3.4.0.js"></script>
+		<script src="./js/lib/oauth-signature.js"></script>
+		<script src="./js/app.js"></script>
+    			<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAE_xHs9e6Q3RerD46OynHyAYW6di3OK10&v=3&callback=initMap">
+    	</script>
+	</body>
+</html>
