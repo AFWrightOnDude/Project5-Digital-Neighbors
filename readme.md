@@ -46,3 +46,6 @@ Sources used for this project include:
 
 -https://discussions.udacity.com/t/no-idea-how-to-implement-the-search-function/182184/5
 	- How to use KnockoutJS to filter a list
+
+-http://www.w3schools.com/howto/howto_js_snackbar.asp
+	- Snackbar/toast code

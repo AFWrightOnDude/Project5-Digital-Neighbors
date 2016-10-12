@@ -1,22 +1,23 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 
-html, body {
-	font-family: 	'Roboto', Arial, Helvetica, sans-serif;
+html,
+body {
+	font-family: 	"Roboto", arial, helvetica, sans-serif;
 	margin: 0;
 	padding: 0;
-	background-color: #C8E6C9;
+	background-color: #c8e6c9;
 	height: 100%;
 }
 
-.Container {
+.container {
 	margin-top: 64px;
-	background-color: 	#EDE7F6;
+	background-color: 	#ede7f6;
 	height: 100%;
 	display: flex;
 }
 
-.TitleBar {
-	background-color: #1B5E20;
+.header {
+	background-color: #1b5e20;
 	color: white;
 	margin-top: -64px;
 	width: 100%;
@@ -27,12 +28,15 @@ html, body {
 	z-index: 9000;
 }
 
-.MenuButton {
+.menu-button {
 	padding: 1em;
 	visibility: visible;
+	cursor: pointer;
+	cursor: hand;
 }
 
-.MenuLinks, li{
+.menu-links,
+li {
 	list-style: none;
 	padding: 1em;
 	color: white;
@@ -43,7 +47,7 @@ a:hover{
 }
 
 nav {
-	background-color: #66BB6A;
+	background-color: #66bb6a;
 	color: white;
 	z-index: 50;
 	padding: 1em;
@@ -63,19 +67,20 @@ nav {
         max-height: 600px;
 }
 
-#MapContainer {
-	background-color: #C8E6C9;
+#map-container {
+	background-color: #c8e6c9;
 	position: 	relative;
 	padding: 1.5em;
 	width: 100%;
 	height: 100%;
 }
 
-#YelpReviewContainer{
+#yelp-review-container {
 	text-align: center;
 }
 
-#YelpRatingStars, #YelpRatingLogo{
+#yelp-rating-stars,
+#yelp-rating-logo {
 	width: 136px;
 	display: block;
 	margin-left: auto;
@@ -83,7 +88,20 @@ nav {
   margin-top: 4px;
 }
 
+.google-maps-error {
+	color: #b22222;
+	font-size: 1.5em;
+}
 
+.api-fail-notification{
+	color: #b22222;
+	font-size: .8em;
+	vertical-align: middle;
+}
+
+.material-icons.md-18 {
+	font-size: 18px;
+}
 
 @media (max-device-height: 450px){
 	/*body{
@@ -91,7 +109,7 @@ nav {
 	}*/
 
 	nav {
-		background-color: #66BB6A;
+		background-color: #66bb6a;
 		color: white;
 		z-index: 50;
 		padding: 1em;
@@ -113,4 +131,53 @@ nav {
 
 	}
 
+}
+
+/* Snackbard code from http://www.w3schools.com/howto/howto_js_snackbar.asp */
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+		visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -160px; /* Divide value of min-width by 2 ..for default*/
+    background-color: #333; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+    visibility: visible; /* Show the snackbar */
+
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
 }

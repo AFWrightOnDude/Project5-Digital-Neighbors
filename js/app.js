@@ -1,27 +1,3 @@
-// Menu slide in / Slide Out
-var menu = document.querySelector('.MenuButton');
-var mapContainer = document.getElementById('MapContainer');
-var drawer = document.querySelector('nav');
-var menuIcon = document.getElementById('MenuIcon');
-
-menu.addEventListener('click', function(e) {
-	drawer.classList.toggle('open');
-	if($('#Nav').hasClass('open')){
-		menuIcon.innerHTML = 'clear';
-	} else {
-		menuIcon.innerHTML = 'menu';
-	}
-	e.stopPropagation();
-});
-
-mapContainer.addEventListener('click', function() {
-    hideNavMenu();
-});
-
-var hideNavMenu = function(){
-	drawer.classList.remove('open');
-	menuIcon.innerHTML = 'menu';
-};
 
 // Data Model / Source
 var restaurantLocations = [
@@ -29,11 +5,11 @@ var restaurantLocations = [
 		name: 'Pho Super Bowl',
 		note: 'The soup will make you feel super.',
 		phone: "1-317-399-7858",
-		url: "http://www.superbowlphowestfield.com/",
+		url: 'http://www.superbowlphowestfield.com/',
 		address: {
-			street: "112 E Main St",
-			city: "Westfield",
-			state: "IN",
+			street: '112 E Main St',
+			city: 'Westfield',
+			state: 'IN',
 			zip: 46074
 		},
 		location: {lat: 40.043006, lng: -86.12732},
@@ -43,12 +19,12 @@ var restaurantLocations = [
 	{
 		name: "Big Hoffa's Smokehouse Bar-B-Que",
 		note: 'Amazing sandwiches and BBQ, matey!',
-		phone: "1-317-867-0077",
-		url: "http://bbqindianapolis.com/",
+		phone: '1-317-867-0077',
+		url: 'http://bbqindianapolis.com/',
 		address: {
-			street: "800 E Main St",
-			city: "Westfield",
-			state: "IN",
+			street: '800 E Main St',
+			city: 'Westfield',
+			state: 'IN',
 			zip: 46074
 		},
 		location: {lat: 40.04333800000001, lng: -86.117615},
@@ -58,12 +34,12 @@ var restaurantLocations = [
 	{
 		name: "Jan's Village Pizza",
 		note: 'A nice pizza pie!',
-		phone: "1-317-896-5050",
-		url: "http://www.jansvillagepizzas.com/",
+		phone: '1-317-896-5050',
+		url: 'http://www.jansvillagepizzas.com/',
 		address: {
-			street: "108 S Union St",
-			city: "Westfield",
-			state: "IN",
+			street: '108 S Union St',
+			city: 'Westfield',
+			state: 'IN',
 			zip: 46074
 		},
 		location: {lat: 40.042494, lng: -86.127522},
@@ -71,14 +47,14 @@ var restaurantLocations = [
 		yelpAPIData: {}
 	},
 	{
-		name: "Wolfies Grill",
+		name: 'Wolfies Grill',
 		note: 'Yay for Steak!',
-		phone: "1-317-399-7826",
-		url: "http://www.wolfiesgrill.com/",
+		phone: '1-317-399-7826',
+		url: 'http://www.wolfiesgrill.com/',
 		address: {
-			street: "137 W Main St",
-			city: "Westfield",
-			state: "IN",
+			street: '137 W Main St',
+			city: 'Westfield',
+			state: 'IN',
 			zip: 46074
 		},
 		location: {lat: 40.042439, lng: -86.129261},
@@ -89,11 +65,11 @@ var restaurantLocations = [
 		name: 'Maneki Neko',
 		note: 'Sushi makes you feel lucky.',
 		phone: "1-317-867-4810",
-		url: "https://locu.com/places/maneki-neko-westfield-us/#menu",
+		url: 'https://locu.com/places/maneki-neko-westfield-us/#menu',
 		address: {
-			street: "214 E Main St",
-			city: "Westfield",
-			state: "IN",
+			street: '214 E Main St',
+			city: 'Westfield',
+			state: 'IN',
 			zip: 46074
 		},
 		location: {lat: 40.04307, lng: -86.125765},
@@ -111,40 +87,44 @@ function AppViewModel(){
 	self.filteredLocations = ko.observableArray();
 	self.query = ko.observable();
 
-	for (var x in restaurantLocations){
-		self.filteredLocations.push(restaurantLocations[x]);
+	self.menuVisible = ko.observable(false);
+
+	self.showHideMenu = function() {
+		self.menuVisible(!self.menuVisible());
+  }
+
+	self.hideMenu = function(){
+		self.menuVisible(false);
 	}
 
+	self.clearSearchFilter = function(){
+		self.query('');
+	}
 
-	$( "#ClearFilterTextBtn" ).click(function() {
-	  resetMapListDisplay();
+	var mapContainer = document.getElementById('map-container');
+	mapContainer.addEventListener('click', function() {
+	    self.hideMenu();
 	});
 
-	var resetMapListDisplay = function(){
-		$('#FilterText').val('');
-		self.filteredLocations.removeAll();
-		for (var x in restaurantLocations){
-			self.filteredLocations.push(restaurantLocations[x]);
-			restaurantLocations[x].marker.setVisible(true);
-		}
-		largeInfoWindow.close();
-		largeInfoWindow.marker = null;
-	};
+
+	for (var i = 0; i < restaurantLocations.length; i++){
+		self.filteredLocations.push(restaurantLocations[i]);
+	}
 
 	self.query.subscribe(function (value){
 
 		self.filteredLocations.removeAll();
 
-		for (var x in restaurantLocations){
-			restaurantLocations[x].marker.setVisible(false);
+		for (var i = 0; i < restaurantLocations.length; i++){
+			restaurantLocations[i].marker.setVisible(false);
 		}
 
-		for(var x in restaurantLocations){
-			if(restaurantLocations[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0){
+		for(var i = 0; i < restaurantLocations.length; i++){
+			if(restaurantLocations[i].name.toLowerCase().indexOf(value.toLowerCase()) >= 0){
 				largeInfoWindow.close();
 				largeInfoWindow.marker = null;
-				restaurantLocations[x].marker.setVisible(true);
-				self.filteredLocations.push(restaurantLocations[x]);
+				restaurantLocations[i].marker.setVisible(true);
+				self.filteredLocations.push(restaurantLocations[i]);
 				}
 		}
 	}, this);
@@ -183,9 +163,8 @@ function AppViewModel(){
 				var targetMarker = this;
 				setTimeout(function(){
 					targetMarker.setAnimation(null);
-				}, 725);
+				}, 1400);
 			}
-
 		});
 		restaurantLocations[i].marker = marker;
 		bounds.extend(markers[i].position);
@@ -194,29 +173,30 @@ function AppViewModel(){
 	map.fitBounds(bounds);
 
 	function populateInfoWindow(marker, infowindow) {
-	// Check to make sure the infowindow is not already opened on this marker.
+		// Check to make sure the infowindow is not already opened on this marker.
 		if (infowindow.marker != marker) {
-	  		infowindow.marker = marker;
-				// If there is a Yelp Rating available, show appropriate stars.
-				if(marker.yelpRating !== ""){
-						infowindow.setContent(
-						'<div><strong>'+ marker.id +
-						'</strong></div><div><p><a  target="_blank" href="' + marker.url +'">' + marker.url+'</a><br><br>'+
-						marker.address.street +'<br>' +
-						marker.address.city + ', ' + marker.address.state + ' ' + marker.address.zip +
-						'<br><a href="tel:'+marker.phone+'">' + marker.phone + '</a><br><br>' +
-						marker.note +
-						'</p><BR><div id="YelpReviewContainer"><a href="' + marker.yelpPageUrl + '" target="_blank"><img id="YelpRatingStars" src="' + marker.yelpRatingImgUrl +
-						'"><span>Based Upon ' + marker.yelpReviewCount + ' Reviews</span><img id="YelpRatingLogo" src="img/yelp_review_stars/Reviews_From_Yelp.png"></a></div></div>');
-				// If API call fails, just show our note.
-				}else{
-						infowindow.setContent('<div><strong>' + marker.id + '</strong></div><div><p><a href="'+marker.url+'">'+ marker.url +'</a><br>'+ marker.note +'</p><br><p style="font-style: italic">Restaurant reviews currently unavailable...</p></div>');
-				}
-	  		infowindow.open(map, marker);
-		  	// Make sure the marker property is cleared if the infowindow is closed.
-	  		infowindow.addListener('closeclick',function(){
-	    		infowindow.marker = null;
-	  		});
+			infowindow.marker = marker;
+			// If there is a Yelp Rating available, show appropriate stars.
+			if(marker.yelpRating !== ""){
+					infowindow.setContent(
+					'<div><strong>'+ marker.id +
+					'</strong></div><div><p><a  target="_blank" href="' + marker.url +'">' + marker.url+'</a><br><br>'+
+					marker.address.street +'<br>' +
+					marker.address.city + ', ' + marker.address.state + ' ' + marker.address.zip +
+					'<br><a href="tel:'+marker.phone+'">' + marker.phone + '</a><br><br>' +
+					marker.note +
+					'</p><BR><div id="yelp-review-container"><a href="' + marker.yelpPageUrl + '" target="_blank"><img id="yelp-rating-stars" src="' + marker.yelpRatingImgUrl +
+					'"><span>Based Upon ' + marker.yelpReviewCount + ' Reviews</span><img id="yelp-rating-logo" src="img/yelp_review_stars/Reviews_From_Yelp.png"></a></div></div>'
+				);
+			// If API call fails, just show our note.
+			}else{
+					infowindow.setContent('<div><strong>' + marker.id + '</strong></div><div><p><a href="'+marker.url+'">'+ marker.url +'</a><br><br>'+ marker.note +'</p><br><p style="font-style: italic">Restaurant reviews currently unavailable...</p></div>');
+			}
+			infowindow.open(map, marker);
+			// Make sure the marker property is cleared if the infowindow is closed.
+			infowindow.addListener('closeclick',function(){
+				infowindow.marker = null;
+			});
 		}
 	}
 
@@ -230,7 +210,7 @@ function AppViewModel(){
 			setTimeout(function(){
 				data.marker.setAnimation(null);
 			}, 725);
-			hideNavMenu();
+			self.hideMenu();
 		}
 	};
 
@@ -244,6 +224,8 @@ function AppViewModel(){
 	var YELP_TOKEN = 'ZBzwfX0onQooHSG-3Tytj33IKBDztUjK';
 	var YELP_KEY_SECRET = 'CKz4L9RKmnvMjl6YJfQMtPKvT1o';
 	var YELP_TOKEN_SECRET = 'mKSvHXhDiiR-ZTK-UoJ84GqQC5M';
+
+	var showErrorToast = true; // To prevent multiple toasts from the loop.
 
 	for (var x = 0; x < restaurantLocations.length; x++)
 	{
@@ -263,32 +245,45 @@ function AppViewModel(){
 				 var encodedSignature = oauthSignature.generate('GET',yelp_url, parameters, YELP_KEY_SECRET, YELP_TOKEN_SECRET);
 				 parameters.oauth_signature = encodedSignature;
 
-				 var settings = {
-					 url: yelp_url,
-					 data: parameters,
-					 cache: true,                // This is crucial to include as well to prevent jQuery from adding on a cache-buster parameter "_=23489489749837", invalidating our oauth-signature
-					 dataType: 'jsonp',
-					 success: function(results) {
-						 restaurantLocations[x].yelpAPIData = results;
-						 markers[x].yelpRating = results.rating;
-						 markers[x].yelpReviewCount = results.review_count;
-						 markers[x].yelpRatingImgUrl = results.rating_img_url_large;
-						 markers[x].yelpPageUrl = results.mobile_url;
-					},
-					 fail: function() {
-						 console.log("Error getting Yelp API Data!");
-					 }
-				 };
-				 // Send AJAX query via jQuery library.
-				 $.ajax(settings);
+				 $.ajax({
+    	 		// ajax settings
+					url: yelp_url,
+					data: parameters,
+					cache: true,                // This is crucial to include as well to prevent jQuery from adding on a cache-buster parameter "_=23489489749837", invalidating our oauth-signature
+					dataType: 'jsonp'
+				}).done(function (data) {
+    			// successful
+					restaurantLocations[x].yelpAPIData = data;
+					markers[x].yelpRating = data.rating;
+					markers[x].yelpReviewCount = data.review_count;
+					markers[x].yelpRatingImgUrl = data.rating_img_url_large;
+					markers[x].yelpPageUrl = data.mobile_url;
+				}).fail(function (jqXHR, textStatus) {
+					// error handling
+					if (showErrorToast){
+						(function showErrorSnackbar() {
+    					// Get the snackbar DIV
+    					var x = document.getElementById("snackbar");
+    					// Add the "show" class to DIV
+    					x.className = "show";
+    					// After 3 seconds, remove the show class from DIV
+    					setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+						})();
+					}
+					showErrorToast = false;
+				});
 		})(x);
 	}
 }
 
-// Map Initialization
+// Map Error Handling and Initialization
+var googleMapError = function(){
+	$('#map-container').append("<span class='google-maps-error'>Error: Unable to load Google Maps Data. Please try again later.</span>");
+};
+
 var map;
 function initMap(){
-	map = new google.maps.Map(document.getElementById('MapContainer'), {
+	map = new google.maps.Map(document.getElementById('map-container'), {
 		center: {lat: 40.04307, lng: -86.125765},
 		zoom:11,
 		disableDefaultUI: true,
